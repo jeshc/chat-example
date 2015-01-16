@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+
+
+  </head>
+  <body>
+
+
+<form action="">
+<div class="container">
+  <h1> Mi chat </h1>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="input-group input-group-lg">
+        <span class="input-group-addon" >Nick name:</span>
+        <input id="nick"type="text" class="form-control" placeholder="name" aria-describedby="sizing-addon1">
+      </div>
+      <BR>
+      <div class="input-group input-group-lg">
+        <span class="input-group-addon" id="gropu">Mensaje:</span>
+        <input id="m2" type="text" class="form-control" placeholder="" aria-describedby="sizing-addon1">
+      </div>
+      <BR>
+      <p>
+      <button class="btn  btn-success">Send</button>
+      </p>
+      <BR>
+
+    </div><!-- /.col-lg-4 -->
+</form>
+    <div class="col-lg-6">
+        <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Conversaci&oacute;n:</h3>
+        </div>
+        <div class="panel-body" id="conversacion">
+        </div>
+     </div>
+    </div><!-- /.col-lg-6 -->
+ 
+
+   </div><!-- /.row -->
+  </div><!-- /.container -->
+
+
+
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+
+    
+      var socket = io();
+      $('form').submit(function(){
+        var myObject = new Object();
+        myObject.name = $('#nick').val();
+        myObject.msg = $('#m2').val();
+        myObject.date =new Date();
+        var myString = JSON.stringify(myObject);
+        socket.emit('chat message', myString);
+        $('#m2').val('');
+
+        return false;
+      });
+      socket.on('chat message', function(msg){
+       // $('#messages').append($('<li>').text(msg));
+       var obj = jQuery.parseJSON( msg );
+        $('#conversacion').append($('<li>').text(obj.date+':'+obj.name+': '+obj.msg));
+        
+      });
+    </script>
+
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
